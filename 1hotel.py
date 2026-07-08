@@ -97,120 +97,132 @@ def ver_habitaciones():
 def registrar_reserva():
     print("\n--- Registrar reserva ---")
 
-    print("ingrese el número de DNI del huésped:")
-    dni = input("DNI: ")
     existeR = False
     id_huesped = None
-    with open("huespedes.txt", "r") as archivo:
+
+    while not existeR:
+
+        print("Ingrese el número de DNI del huésped (0 para volver al menú):")
+        dni = input("DNI: ")
+
+        if dni == "0":
+            return
+
+        with open("huespedes.txt", "r") as archivo:
+            for linea in archivo:
+                datos = linea.strip().split(",")
+                if datos[2].strip() == dni:
+                    existeR = True
+                    id_huesped = datos[0].strip()   # Guardo el ID del huésped
+                    break
+
+        if not existeR:
+            print("Huésped no registrado. Intente nuevamente.\n")
+
+
+
+    contadorD = 0
+    with open("habitaciones.txt", "r") as archivo:
         for linea in archivo:
-            datos = linea.strip().split(",")
-            if datos[2].strip() == str(dni):
-                existeR = True
-                id_huesped = datos[0].strip()       #acá guardo id huesped para hacer la reserva al final
-        if existeR:                                 #si el huesped está registrado muestra si hay habitaciones disponibles
-            contadorD = 0
-            with open("habitaciones.txt", "r") as archivo:
-                for linea in archivo:
-                    habitacion = linea.strip().split(",")
-                    if habitacion[2].strip() == "Disponible":
-                        contadorD += 1
-                        print(f"habitacion disponible: {habitacion[0]}, Tipo: {habitacion[1]}")
-                else:
-                    if contadorD == 0:
-                        print("No hay habitaciones disponibles")
-                        return
-                if contadorD > 0:                   #si el contador es mayor a 0 es porque hay habitaciones 
-                    while True:
-                        hay_disponible = False
-                        print("Ingrese la habitación que desea reservar:")
-                        numero_habitacion = input("Número de habitación: ")
-  
-                        with open("habitaciones.txt", "r") as archivo:
-                            for linea in archivo:
-                                habitacion = linea.strip().split(",")
-                                if numero_habitacion == habitacion[0] and habitacion[2].strip() == "Disponible":
-                                    hay_disponible = True
-                                    break    
-                            if hay_disponible:
-                                break     #acá ya validó que la habitacion proporcionada es correcta a las disponibles y si no baja y y vuelve a mostrar la lista para reingresar una habitación disponible. una vez que valida sale del while
+            habitacion = linea.strip().split(",")
+            if habitacion[2].strip() == "Disponible":
+                contadorD += 1
+                print(f"habitacion disponible: {habitacion[0]}, Tipo: {habitacion[1]}")
+        else:
+            if contadorD == 0:
+                print("No hay habitaciones disponibles")
+                return
+        if contadorD > 0:                   #si el contador es mayor a 0 es porque hay habitaciones 
+            while True:
+                hay_disponible = False
+                print("Ingrese la habitación que desea reservar:")
+                numero_habitacion = input("Número de habitación: ")
 
-                            print("esta habitación no está disponible. Vuelve a revisar la lista de disponibles")
-                            with open("habitaciones.txt", "r") as archivo:
-                                for linea in archivo:
-                                    habitacion = linea.strip().split(",")
-                                    if habitacion[2].strip() == "Disponible":
-                                        print(f"habitacion disponible: {habitacion[0]}, Tipo: {habitacion[1]}")
+                with open("habitaciones.txt", "r") as archivo:
+                    for linea in archivo:
+                        habitacion = linea.strip().split(",")
+                        if numero_habitacion == habitacion[0] and habitacion[2].strip() == "Disponible":
+                            hay_disponible = True
+                            break    
                     if hay_disponible:
-                        # Validar fecha de entrada y salida
-                        while True:
-                            try:
-                                fecha_entrada = datetime.strptime(input("Ingrese la fecha de entrada (dd/mm/aaaa): "),"%d/%m/%Y")
-                                break
-                            except ValueError:
-                                print("Fecha inválida. Debe tener el formato dd/mm/aaaa.")
-                        while True:
-                            try:
-                                fecha_salida = datetime.strptime(input("Ingrese la fecha de salida (dd/mm/aaaa): "),"%d/%m/%Y")
-                                if fecha_salida <= fecha_entrada:
-                                    print("La fecha de salida debe ser posterior a la fecha de entrada.")
-                                else:
-                                    break
-                            except ValueError:
-                                print("Fecha inválida. Debe tener el formato dd/mm/aaaa.")
+                        break     #acá ya validó que la habitacion proporcionada es correcta a las disponibles, y si, no baja y y vuelve a mostrar la lista para reingresar una habitación disponible. una vez que valida sale del while
 
-                        hay_conflicto = False
-
-                        try:
-                            with open("reservas.txt", "r") as archivo:
-                                for linea in archivo:
-
-                                    datos = linea.strip().split(",")
-                                    # datos[0] id reserva
-                                    # datos[1] id huesped
-                                    # datos[2] es el número de habitación
-                                    # datos[3] fecha entrada
-                                    # datos[4] fecha salida
-                                    # datos[5] estado
-
-                                    if datos[2].strip() == numero_habitacion and datos[5].strip() == "Activa":
-
-                                        entrada_existente = datetime.strptime(datos[3].strip(), "%d/%m/%Y")
-                                        salida_existente = datetime.strptime(datos[4].strip(), "%d/%m/%Y")
-
-                                        # Comprobar si las fechas se pisan
-                                        if fecha_entrada < salida_existente and fecha_salida > entrada_existente:
-                                            hay_conflicto = True
-                                            break
-
-                        except FileNotFoundError:
-                            # Si no existe reservas.txt significa que todavía no hay reservas
-                            pass
-
-
-                        if hay_conflicto:
-                            print("La habitación ya está reservada para esas fechas.")
-                            return
-
+                    print("esta habitación no está disponible. Vuelve a revisar la lista de disponibles")
+                    with open("habitaciones.txt", "r") as archivo:
+                        for linea in archivo:
+                            habitacion = linea.strip().split(",")
+                            if habitacion[2].strip() == "Disponible":
+                                print(f"habitacion disponible: {habitacion[0]}, Tipo: {habitacion[1]}")
+            if hay_disponible:
+                    # Validar fecha de entrada y salida
+                while True:
+                    try:
+                        fecha_entrada = datetime.strptime(input("Ingrese la fecha de entrada (dd/mm/aaaa): "),"%d/%m/%Y")
+                        break
+                    except ValueError:
+                        print("Fecha inválida. Debe tener el formato dd/mm/aaaa.")
+                while True:
+                    try:
+                        fecha_salida = datetime.strptime(input("Ingrese la fecha de salida (dd/mm/aaaa): "),"%d/%m/%Y")
+                        if fecha_salida <= fecha_entrada:
+                            print("La fecha de salida debe ser posterior a la fecha de entrada.")
                         else:
-                            print("La reserva está disponible.")
+                            break
+                    except ValueError:
+                        print("Fecha inválida. Debe tener el formato dd/mm/aaaa.")
 
-                            contador = 0
+                hay_conflicto = False
 
-                            try:
-                                with open("reservas.txt", "r") as archivo:
-                                    for linea in archivo:
-                                        contador += 1
+                try:
+                    with open("reservas.txt", "r") as archivo:
+                        for linea in archivo:
+                            datos = linea.strip().split(",")
+                            # datos[0] id reserva
+                            # datos[1] id huesped
+                            # datos[2] es el número de habitación
+                            # datos[3] fecha entrada
+                            # datos[4] fecha salida
+                            # datos[5] estado
 
-                            except FileNotFoundError:
-                                pass
+                            if datos[2].strip() == numero_habitacion and datos[5].strip() == "Activa":
 
-                            id_reserva = contador + 1
+                                entrada_existente = datetime.strptime(datos[3].strip(), "%d/%m/%Y")
+                                salida_existente = datetime.strptime(datos[4].strip(), "%d/%m/%Y")
 
-                            with open("reservas.txt", "a") as archivo:
-                                archivo.write(f"{id_reserva},{id_huesped},{numero_habitacion},"f"{fecha_entrada.strftime('%d/%m/%Y')},"f"{fecha_salida.strftime('%d/%m/%Y')},Activa\n")
+                                # Comprobar si las fechas se pisan
+                                if fecha_entrada < salida_existente and fecha_salida > entrada_existente:
+                                    hay_conflicto = True
+                                    break
 
-                            print("\nReserva registrada correctamente.")
-                            print(f"ID de reserva: {id_reserva}")
+                except FileNotFoundError:
+                    # Si no existe reservas.txt significa que todavía no hay reservas
+                    pass
+
+
+                if hay_conflicto:
+                    print("La habitación ya está reservada para esas fechas.")
+                    return
+
+                else:
+                    print("La reserva está disponible.")
+
+                    contador = 0
+
+                    try:
+                        with open("reservas.txt", "r") as archivo:
+                            for linea in archivo:
+                                contador += 1
+
+                    except FileNotFoundError:
+                        pass
+
+                    id_reserva = contador + 1
+
+                    with open("reservas.txt", "a") as archivo:
+                        archivo.write(f"{id_reserva},{id_huesped},{numero_habitacion},"f"{fecha_entrada.strftime('%d/%m/%Y')},"f"{fecha_salida.strftime('%d/%m/%Y')},Activa\n")
+
+                    print("\nReserva registrada correctamente.")
+                    print(f"ID de reserva: {id_reserva}")
 
 
 

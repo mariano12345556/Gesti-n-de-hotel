@@ -1,2 +1,12 @@
-1,asdasd,12354678
-2,mariano,12345678
+1,Juan Pérez,30111222
+2,Ana Gómez,28456789
+3,Carlos Rodríguez,33444555
+4,Lucía Fernández,35666777
+5,Martín López,29888777
+6,Sofía Díaz,41222333
+7,Nicolás Ruiz,38999111
+8,Valentina Torres,42777888
+9,Joaquín Medina,31555999
+10,Camila Romero,40123456
+11,Pedro Suárez,27666555
+12,Florencia Ortiz,43888777

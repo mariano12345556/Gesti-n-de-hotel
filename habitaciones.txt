@@ -1,12 +1,12 @@
 101,Simple,Ocupada
-102,Simple,Disponible
+102,Simple,Ocupada
 103,Simple,Ocupada
 104,Simple,Disponible
 105,Simple,Ocupada
 106,Doble,Disponible
 107,Doble,Ocupada
 108,Doble,Disponible
-109,Doble,Ocupada
+109,Doble,Disponible
 110,Suite,Disponible
 111,Suite,Ocupada
 112,Suite,Ocupada

@@ -8,7 +8,7 @@ Integrantes y legajo:
 * [Roa Pertile Genaro Joaquin] - [31335]
 * [Martinez Máximo Geronimo] - [30666]
 * [Yudiche Emanuel] - [31333]
-* [Mateo Altamirano] - 
+* [Mateo Altamirano] - [30048]
 
 ---
 
@@ -17,11 +17,11 @@ Este proyecto consiste en un sistema de gestión hotelera desarrollado en Python
 
 El sistema permite:
 
-Registrar huéspedes.
-Registrar reservas.
-Consultar las habitaciones disponibles y su estado.
-Realizar el check-in, actualizando el estado de la habitación y de la reserva.
-Realizar el check-out, liberando la habitación y finalizando la reserva.
+* Registrar huéspedes.
+* Registrar reservas.
+* Consultar las habitaciones disponibles y su estado.
+* Realizar el check-in, actualizando el estado de la habitación y de la reserva.
+* Realizar el check-out, liberando la habitación y finalizando la reserva.
 
 La información se almacena en archivos de texto (huespedes.txt, habitaciones.txt y reservas.txt), lo que permite conservar los datos entre ejecuciones del programa.
 ---

@@ -5,6 +5,15 @@
 
 from datetime import datetime
 
+with open("huespedes.txt", "a") as archivo:
+    pass
+
+with open("habitaciones.txt", "a") as archivo:
+    pass
+
+with open("reservas.txt", "a") as archivo:
+    pass
+
 
 def menu_principal():
     while True:
@@ -76,13 +85,16 @@ def registrar_huesped():
 
 
 def ver_habitaciones():
-    print("\n--- Habitaciones ---")
+    print("\n--- Habitaciones ---\n")
+
+    print(f"{'Número':<10}{'Tipo':<15}{'Estado':<15}")
+    print("-" * 40)
 
     with open("habitaciones.txt", "r") as archivo:
         for linea in archivo:
             habitacion = linea.strip().split(",")
-            print(f"Habitación: {habitacion[0]},Tipo: {habitacion[1]}, Estado: {habitacion[2]}")
-    print()
+
+            print(f"{habitacion[0]:<10}{habitacion[1]:<15}{habitacion[2]:<15}")
 
 
 
@@ -206,9 +218,6 @@ def registrar_reserva():
 
 
 
-
-
-
 def check_in():
 
     print("\n--- Check-In ---")
@@ -255,7 +264,7 @@ def check_in():
 
     with open("reservas.txt", "w") as archivo:
         archivo.writelines(nuevas_lineas)
-    print("Chek-in realizado correctamente.")
+    print("Check-in realizado correctamente.")
 
 
 

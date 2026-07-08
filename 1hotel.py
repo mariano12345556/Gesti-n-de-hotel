@@ -10,12 +10,11 @@ def menu_principal():
     while True:
         print("\n--- Menú Principal ---")
         print("1. Registrar huésped")
-        print("2. Ver habitaciones disponibles") 
+        print("2. Ver todas las habitaciones") 
         print("3. Registrar reserva")
         print("4. Realizar Check-In")
         print("5. Realizar Check-Out")
-        print("6. Ver estadísticas de ocupación")
-        print("7. Salir")
+        print("6. Salir")
         opcion = input("Seleccione una opción: ")
 
         if opcion == "1":
@@ -34,9 +33,6 @@ def menu_principal():
             check_out()
 
         elif opcion == "6":
-            estadisticas()
-
-        elif opcion == "7":
             print("Gracias por utilizar el sistema.")
             break
 
@@ -62,7 +58,7 @@ def registrar_huesped():
                         if datos[2].strip() == str(dni):
                             existe = True
                 if existe:
-                    print("El huésped ya está registrado.")
+                    print("Ya existe un huesped registrado con ese DNI.")
                     return
                 else:
                     id_huesped = contador + 1
@@ -80,7 +76,7 @@ def registrar_huesped():
 
 
 def ver_habitaciones():
-    print("\n--- Habitaciones disponibles ---")
+    print("\n--- Habitaciones ---")
 
     with open("habitaciones.txt", "r") as archivo:
         for linea in archivo:
@@ -214,13 +210,101 @@ def registrar_reserva():
 
 
 def check_in():
-    print("Función check-in.")
+
+    print("\n--- Check-In ---")
+
+    id_reserva = input("Ingrese el ID de la reserva: ")
+
+    existe = False
+    numero_habitacion = ""
+
+    with open("reservas.txt","r") as archivo:
+        for linea in archivo:
+            datos = linea.strip().split(",")
+            if datos[0].strip() == id_reserva:
+                existe = True
+                numero_habitacion = datos[2].strip()
+                if datos[5].strip() != "Activa":
+                    print("La reserva no está activa.")
+                    return
+                break
+        if not existe:
+            print("Reserva no encontrada.")
+            return
+
+    nuevas_lineas = []
+
+    with open("habitaciones.txt", "r") as archivo:
+        for linea in archivo:
+            habitacion = linea.strip().split(",")
+            if habitacion[0].strip() == numero_habitacion:
+                habitacion[2] = "Ocupada"
+            nuevas_lineas.append(",".join(habitacion) + "\n")
+
+    # Sobrescribimos el archivo con la información actualizada
+    with open("habitaciones.txt", "w") as archivo:
+        archivo.writelines(nuevas_lineas)
+
+    nuevas_lineas = []
+    with open("reservas.txt", "r") as archivo:
+        for linea in archivo:
+            reserva = linea.strip().split(",")
+            if reserva[0].strip() == id_reserva:
+                reserva[5] = "En curso"
+            nuevas_lineas.append(",".join(reserva) + "\n")
+
+    with open("reservas.txt", "w") as archivo:
+        archivo.writelines(nuevas_lineas)
+    print("Chek-in realizado correctamente.")
+
+
 
 def check_out():
-    print("Función check-out.")
+    print("\n--- Check-out ---")
+    id_reserva = input("Ingrese el ID de la reserva: ")
 
-def estadisticas():
-    print("Función estadísticas.")
+    existe = False
+    numero_habitacion = ""
+
+    with open("reservas.txt","r") as archivo:
+        for linea in archivo:
+            datos = linea.strip().split(",")
+            if datos[0].strip() == id_reserva:
+                existe = True
+                numero_habitacion = datos[2].strip()
+                if datos[5].strip() != "En curso":
+                    print("La reserva no está en curso.")
+                    return
+                break
+        if not existe:
+            print("Reserva no encontrada.")
+            return
+
+    nuevas_lineas = []
+
+    with open("habitaciones.txt", "r") as archivo:
+        for linea in archivo:
+            habitacion = linea.strip().split(",")
+            if habitacion[0].strip() == numero_habitacion:
+                habitacion[2] = "Disponible"
+            nuevas_lineas.append(",".join(habitacion) + "\n")
+
+
+    with open("habitaciones.txt", "w") as archivo:
+        archivo.writelines(nuevas_lineas)
+
+    nuevas_lineas = []
+    with open("reservas.txt", "r") as archivo:
+        for linea in archivo:
+            reserva = linea.strip().split(",")
+            if reserva[0].strip() == id_reserva:
+                reserva[5] = "Finalizada"
+            nuevas_lineas.append(",".join(reserva) + "\n")
+
+    with open("reservas.txt", "w") as archivo:
+        archivo.writelines(nuevas_lineas)
+    print("Check-out realizado correctamente.")
+
 
 if __name__ == "__main__":
     menu_principal()

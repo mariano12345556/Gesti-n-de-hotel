@@ -1,7 +1,3 @@
-#El sistema deberá administrar reservas y ocupación de habitaciones dentro de un hotel.
-#  Podrá contemplar registro de huéspedes, check-in, check-out, control de habitaciones disponibles y cálculo de estadías.
-# La solución también podrá incorporar distintos tipos de habitaciones y estadísticas de ocupación.
-
 
 from datetime import datetime
 
